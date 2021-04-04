@@ -21,10 +21,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="453dp">
+            android:layout_height="565dp">
 
             <Button
-                android:id="@+id/btn_signIn"
+                android:id="@+id/signInButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/chkBox1"
@@ -39,10 +39,11 @@
 
 
             <Button
+                android:id="@+id/forgotPasswordButton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="145dp"
                 android:layout_height="43dp"
-                android:layout_below="@+id/btn_signIn"
+                android:layout_below="@+id/signInButton"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="11dp"
                 android:layout_marginBottom="15dp"
@@ -55,11 +56,11 @@
                 app:backgroundTint="@color/white" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/switchToRegisterButton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="282dp"
                 android:layout_height="40dp"
-                android:layout_below="@+id/btn_signIn"
+                android:layout_below="@+id/signInButton"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="29dp"
@@ -97,10 +98,10 @@
                 android:layout_below="@+id/linearLayout1"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="-10dp"
+                android:contentDescription="TODO"
                 android:rotation="45"
                 android:src="@drawable/square"
-                tools:ignore="NotSibling"
-                android:contentDescription="TODO" />
+                tools:ignore="NotSibling" />
 
             <RelativeLayout
                 android:id="@+id/relativeLayout4"
@@ -121,13 +122,14 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signInEmailInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_userIcon"
                     android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/imgView_userIcon"
                     android:background="@drawable/edit_text_rounded"
-                    android:hint="@string/username_input"
+                    android:hint="@string/email_input"
                     android:inputType="text"
                     android:paddingLeft="20dp"
                     android:textSize="15sp" />
@@ -153,6 +155,7 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signInPasswordInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_passwordIcon"

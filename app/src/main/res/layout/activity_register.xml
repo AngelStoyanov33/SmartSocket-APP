@@ -25,7 +25,7 @@
 
 
             <Button
-                android:id="@+id/btn_signIn"
+                android:id="@+id/signUpButton"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/chkBox1"
@@ -92,6 +92,7 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signUpEmailInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_emailIcon"
@@ -125,6 +126,7 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signUpUsernameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_userIcon"
@@ -157,6 +159,7 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signUpPasswordInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_passwordIcon"
@@ -189,6 +192,7 @@
                 android:layout_marginRight="30dp">
 
                 <EditText
+                    android:id="@+id/signUpPasswordConfirmInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_passwordIcon2"
@@ -233,7 +237,7 @@
                 android:layout_marginRight="30dp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/switchToLoginButton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="281dp"
                 android:layout_height="50dp"
