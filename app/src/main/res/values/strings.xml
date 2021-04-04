@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartSocket Central</string>
+    <string name="app_name">SmartAssociate HQ</string>
 
     <!-- Activity  register and login -->
     <string name="register_label">SIGN UP</string>
@@ -12,6 +12,8 @@
 
     <string name="sign_up_button">SIGN UP</string>
     <string name="sign_in_button">SIGN IN</string>
+
+    <string name="sign_out">Sign out</string>
 
     <string name="tos_checkbox">I agree to the Terms of Service</string>
 
