@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.smartsocket.app">
 
     <application
@@ -9,14 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SSApp">
-        <activity android:name=".activities.LoginActivity"></activity>
-        <activity android:name=".activities.RegisterActivity">
+        <activity android:name=".activities.DashboardActivity"></activity>
+        <activity android:name=".activities.LoginActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.RegisterActivity" />
     </application>
 
 </manifest>
