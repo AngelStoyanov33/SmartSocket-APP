@@ -3,7 +3,9 @@ package com.smartsocket.app.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -31,6 +33,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_login);
 
         switchToRegisterButton = (Button) findViewById(R.id.switchToRegisterButton);
@@ -60,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
             }
             fireAuth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener(authResult -> {
+
+
                         Intent switchToDashboard = new Intent(getApplicationContext(), DashboardActivity.class);
                         startActivity(switchToDashboard);
                         finish();
@@ -78,5 +87,9 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(switchToDashboard);
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() { //Disable non token activity show up
     }
 }
