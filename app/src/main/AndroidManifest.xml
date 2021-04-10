@@ -4,13 +4,17 @@
     package="com.smartsocket.app">
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SSApp">
-        <activity android:name=".activities.DashboardActivity"></activity>
+        android:theme="@style/DashboardTest">
+        <activity android:name=".activities.DashboardActivity"
+            android:theme="@style/DashboardTest">
+
+        </activity>
         <activity android:name=".activities.LoginActivity"
             tools:replace="android:launchMode"
             android:launchMode="standard">
@@ -21,6 +25,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegisterActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
