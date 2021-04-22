@@ -74,4 +74,58 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/socket_card"
+        android:layout_width="269dp"
+        android:layout_height="167dp"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/logOutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/socket_cv_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="90dp"
+            android:background="@null"
+            android:contentDescription="Power switch"
+            android:scaleType="fitCenter"
+            android:src="@drawable/socket_power_off" />
+
+        <ImageView
+            android:id="@+id/socket_img"
+            android:layout_width="99dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/socket"/>
+
+
+        <TextView
+            android:id="@+id/socket_cv_state"
+            android:layout_width="131dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="50dp"
+            android:text="Inactive"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/red" />
+
+        <TextView
+            android:id="@+id/socket_cv_name"
+            android:layout_width="148dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

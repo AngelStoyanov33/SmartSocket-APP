@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartAssociate HQ</string>
+    <string name="app_name">SA HQ</string>
 
     <!-- Activity  register and login -->
     <string name="register_label">SIGN UP</string>
