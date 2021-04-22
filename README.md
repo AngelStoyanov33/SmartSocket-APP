@@ -1,4 +1,3 @@
-
 # **SmartAssociate Socket**
 
 *SmartAssociate Socket* представлява система, която обединява всички електрически уреди, посредством мрежа от "умни" контакти, които могат да бъдат контролирани от всяка точка на света. Системата може да се използва навсякъде, където са налични един или много електроуреди, електричество и интернет, като например в офиса или в дома.
@@ -9,24 +8,22 @@
 
 ## Използвани технологии
 
-[ESP8266]([https://www.espressif.com/en/products/socs/esp8266](https://www.espressif.com/en/products/socs/esp8266)) - Микроконтролерът, "мозъкът" на контакта.
+[ESP8266](https://www.espressif.com/en/products/socs/esp8266) - Микроконтролерът, "мозъкът" на контакта.
 
-[Arduino (C++)]([https://www.arduino.cc/](https://www.arduino.cc/)) - Технологията, използвана за програмиране на микроконтролера.
+[Arduino (C++)](https://www.arduino.cc/) - Технологията, използвана за програмиране на микроконтролера.
 
-[Flask (Python)]([https://flask.palletsprojects.com/en/1.1.x/](https://flask.palletsprojects.com/en/1.1.x/)) - Технологията, използвана за създаването на Web сървър, който обработва и изпраща заявки.
+[Flask (Python)](https://flask.palletsprojects.com/en/1.1.x/) - Технологията, използвана за създаването на Web сървър, който обработва и изпраща заявки.
 
-[Android (Java)]([https://developer.android.com/](https://developer.android.com/)) - Технологията, използвана за създаването на мобилното приложение.
+[Android (Java)](https://developer.android.com/) - Технологията, използвана за създаването на мобилното приложение.
 
-[MQTT]([https://mqtt.org/](https://mqtt.org/)) - Протоколът, по който се осъществява комуникацията и се изпращат "съобщенията" до микроконтролера.
+[MQTT](https://mqtt.org/) - Протоколът, по който се осъществява комуникацията и се изпращат "съобщенията" до микроконтролера.
 
-[Google Firebase]([https://firebase.google.com/](https://firebase.google.com/)) - Технологията, използвана за удостоверяване на потребителите в мобилното приложение.
+[Google Firebase](https://firebase.google.com/) - Технологията, използвана за удостоверяване на потребителите в мобилното приложение.
 
 ## Информация за авторите на проекта
 
-[**Ангел Стоянов**]([https://github.com/AngelStoyanov33]) - *програмист, дизайнер, хардуерист*
-
-[**Лилия Любенова**]([https://github.com/AngelStoyanov33]) - *програмист, дизайнер, 
-хардуерист*
+[**Ангел Стоянов**](https://github.com/AngelStoyanov33) - програмист, дизайнер, хардуерист
+[**Лилия Любенова**](https://github.com/Lilly7777) - програмист, дизайнер, хардуерист
 
 ## Attribution
 <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
