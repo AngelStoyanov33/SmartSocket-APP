@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class HTTPRequestManager {
 
-    public static final String SERVER_LOCATION = "http://192.168.0.105:5000";
+    public static final String SERVER_LOCATION = "http://192.168.0.104:5000";
 
 
     public void sendJSONRequestVolley(final String URL, HashMap<String, String> params_, Context context, HashMap<String, String> response){
@@ -49,6 +49,7 @@ public class HTTPRequestManager {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(req);
+        requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
     }
 
 

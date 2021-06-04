@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.smartsocket.app.R;
 import com.smartsocket.app.service.HTTPRequestManager;
+import com.smartsocket.app.utils.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +46,8 @@ public class DashboardActivity extends AppCompatActivity{
     private String token = "";
     private int statusGlobal = 3;
 
+    private LoadingDialog loadingDialog = new LoadingDialog(DashboardActivity.this);;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +56,8 @@ public class DashboardActivity extends AppCompatActivity{
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         setContentView(R.layout.activity_dashboard);
+
         MaterialCardView socketCard = (MaterialCardView) findViewById(R.id.socket_card);
         socketCard.setVisibility(View.INVISIBLE);
 
@@ -100,6 +104,7 @@ public class DashboardActivity extends AppCompatActivity{
                                             HashMap<String, String> params = new HashMap<>();
                                             HashMap<String, String> response = new HashMap<>();
                                             params.put("token", idToken);
+                                            Log.d("AYOOOOOOOOOO", deviceUIDInput.getText().toString());
                                             params.put("device_code", deviceUIDInput.getText().toString());
                                             httpRequestManager.sendJSONRequestVolley(HTTPRequestManager.SERVER_LOCATION + "/register", params, this.getApplicationContext(), response);
                                             dialog.cancel();
@@ -119,6 +124,7 @@ public class DashboardActivity extends AppCompatActivity{
         });
 
         socketIButton.setOnClickListener(view -> {
+            loadingDialog.start();
             if(statusGlobal == 1){
                 HashMap<String, String> params3 = new HashMap<>();
                 params3.put("token", token);
@@ -126,15 +132,18 @@ public class DashboardActivity extends AppCompatActivity{
                 params3.put("state", 0 + "");
                 JsonObjectRequest req3 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/state", new JSONObject(params3),
                         response3 -> {
-                            Log.d("Response", response3.toString());
+                            Log.d("Response3", response3.toString());
                             try {
                                 int statusReceive = Integer.parseInt((String) response3.get("device_status"));
+                                Log.d("STATUS", statusReceive + "");
                                 if(statusReceive == 0){
+                                    loadingDialog.stop();
                                     statusGlobal = statusReceive;
                                     socketIButton.setImageResource(R.drawable.socket_power_off);
                                     socketStatus.setText("Inactive");
                                     socketStatus.setTextColor(getResources().getColor(R.color.red));
                                 }else if(statusReceive == 1){
+                                    loadingDialog.stop();
                                     statusGlobal = statusReceive;
                                     socketIButton.setImageResource(R.drawable.socket_power_on);
                                     socketStatus.setText("Active");
@@ -147,6 +156,7 @@ public class DashboardActivity extends AppCompatActivity{
 
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 requestQueue.add(req3);
+                requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
             }else if(statusGlobal == 0){
                 HashMap<String, String> params3 = new HashMap<>();
                 params3.put("token", token);
@@ -154,21 +164,22 @@ public class DashboardActivity extends AppCompatActivity{
                 params3.put("state", 1 + "");
                 JsonObjectRequest req3 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/state", new JSONObject(params3),
                         response3 -> {
-                            Log.d("Response", response3.toString());
+                            Log.d("Response4", response3.toString());
                             try {
                                 int statusReceive = Integer.parseInt((String) response3.get("device_status"));
                                 socketCard.setVisibility(View.VISIBLE);
                                 if(statusReceive == 0){
-
                                     socketIButton.setImageResource(R.drawable.socket_power_off);
                                     socketStatus.setText("Inactive");
                                     socketStatus.setTextColor(getResources().getColor(R.color.red));
                                     statusGlobal = statusReceive;
+                                    loadingDialog.stop();
                                 }else if(statusReceive == 1){
                                     socketIButton.setImageResource(R.drawable.socket_power_on);
                                     socketStatus.setText("Active");
                                     socketStatus.setTextColor(getResources().getColor(R.color.green));
                                     statusGlobal = statusReceive;
+                                    loadingDialog.stop();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -177,62 +188,65 @@ public class DashboardActivity extends AppCompatActivity{
 
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 requestQueue.add(req3);
+                requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
             }
         });
 
 
-
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                FirebaseAuth.getInstance().getCurrentUser().getIdToken(true)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                String idToken = task.getResult().getToken();
-                                HashMap<String, String> params = new HashMap<>();
-                                HashMap<String, String> response = new HashMap<>();
-                                params.put("token", idToken);
-                                params.put("device_code", DUID);
-                                JsonObjectRequest req2 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/status", new JSONObject(params),
-                                        response2 -> {
-                                            Log.d("Response", response2.toString());
-                                            try {
-                                                int status = Integer.parseInt((String) response2.get("device_status"));
-                                                socketCard.setVisibility(View.VISIBLE);
-                                                statusGlobal = status;
-                                                token = idToken;
-                                                DUID = response.get("device_code");
-                                                if (status == 5) {
+        if(DUID != null) {
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                public void run() {
+                    FirebaseAuth.getInstance().getCurrentUser().getIdToken(true)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    String idToken = task.getResult().getToken();
+                                    HashMap<String, String> params = new HashMap<>();
+                                    HashMap<String, String> response = new HashMap<>();
+                                    params.put("token", idToken);
+                                    params.put("device_code", DUID);
+                                    JsonObjectRequest req2 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/status", new JSONObject(params),
+                                            response2 -> {
+                                                Log.d("Response", response2.toString());
+                                                try {
+                                                    int status = Integer.parseInt((String) response2.get("device_status"));
                                                     socketCard.setVisibility(View.VISIBLE);
-                                                    socketIButton.setImageResource(R.drawable.socket_power_offline);
-                                                    socketStatus.setText("Offline");
-                                                    socketStatus.setTextColor(getResources().getColor(R.color.gray));
-                                                    return;
+                                                    statusGlobal = status;
+                                                    token = idToken;
+                                                    if (status == 5) {
+                                                        socketCard.setVisibility(View.VISIBLE);
+                                                        socketIButton.setImageResource(R.drawable.socket_power_offline);
+                                                        socketStatus.setText("Offline");
+                                                        socketStatus.setTextColor(getResources().getColor(R.color.gray));
+                                                        return;
+                                                    }
+
+                                                    if (status == 0) {
+                                                        socketIButton.setImageResource(R.drawable.socket_power_off);
+                                                        socketStatus.setText("Inactive");
+                                                        socketStatus.setTextColor(getResources().getColor(R.color.red));
+                                                        return;
+                                                    } else if (status == 1) {
+                                                        socketIButton.setImageResource(R.drawable.socket_power_on);
+                                                        socketStatus.setText("Active");
+                                                        socketStatus.setTextColor(getResources().getColor(R.color.green));
+                                                        return;
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
+                                            }, error -> VolleyLog.e("Error: ", error.getMessage()));
 
-                                                if (status == 0) {
-                                                    socketIButton.setImageResource(R.drawable.socket_power_off);
-                                                    socketStatus.setText("Inactive");
-                                                    socketStatus.setTextColor(getResources().getColor(R.color.red));
-                                                    return;
-                                                } else if (status == 1) {
-                                                    socketIButton.setImageResource(R.drawable.socket_power_on);
-                                                    socketStatus.setText("Active");
-                                                    socketStatus.setTextColor(getResources().getColor(R.color.green));
-                                                    return;
-                                                }
-
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }, error -> VolleyLog.e("Error: ", error.getMessage()));
-
-                                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                                requestQueue.add(req2);
-                            } });
-            }
-        };
-        timer.schedule(timerTask, 0, 15000);
+                                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                    requestQueue.add(req2);
+                                    requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
+                                }
+                            });
+                }
+            };
+            timer.schedule(timerTask, 0, 15000);
+        }
 
 
 
@@ -248,6 +262,7 @@ public class DashboardActivity extends AppCompatActivity{
         TextView socketStatus = (TextView) findViewById(R.id.socket_cv_state);
 
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        loadingDialog.start();
         mUser.getIdToken(true)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -259,52 +274,59 @@ public class DashboardActivity extends AppCompatActivity{
                                 response1 -> {
                                     Log.d("Response", response1.toString());
                                     try {
+                                        if(response1.get("status").equals("error")){
+                                            loadingDialog.stop();
+                                            return;
+                                        }else {
                                         response.put("device_code", (String) response1.get("device_code"));
+                                        Log.d("HEEEEEEE", "HEEERE!!!!!!!!!!!");
                                         DUID = response.get("device_code");
                                         Log.d("DUID", response.get("device_code"));
 
-                                        if(DUID != null){
-                                            socketCard.setVisibility(View.VISIBLE);
-                                            socketIButton.setImageResource(R.drawable.socket_power_offline);
-                                            socketStatus.setText("Offline");
-                                            socketStatus.setTextColor(getResources().getColor(R.color.gray));
-                                        }
+                                        if (DUID != null) {
+                                                loadingDialog.stop();
+                                                socketCard.setVisibility(View.VISIBLE);
+                                                socketIButton.setImageResource(R.drawable.socket_power_offline);
+                                                socketStatus.setText("Offline");
+                                                socketStatus.setTextColor(getResources().getColor(R.color.gray));
+                                            }
 
+                                            socketName.setText(String.format("Socket %s", response.get("device_code")));
+                                            HashMap<String, String> params2 = new HashMap<>();
+                                            params2.put("token", idToken);
+                                            params2.put("device_code", response.get("device_code"));
+                                            JsonObjectRequest req2 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/status", new JSONObject(params2),
+                                                    response2 -> {
+                                                        Log.d("Response", response2.toString());
+                                                        try {
+                                                            int status = Integer.parseInt((String) response2.get("device_status"));
+                                                            Log.d("NICE STATUS", status + "");
+                                                            socketCard.setVisibility(View.VISIBLE);
+                                                            statusGlobal = status;
+                                                            token = idToken;
+                                                            DUID = response.get("device_code");
 
-                                        socketName.setText(String.format("Socket %s", response.get("device_code")));
-                                        HashMap<String, String> params2 = new HashMap<>();
-                                        params2.put("token", idToken);
-                                        params2.put("device_code", response.get("device_code"));
-                                        JsonObjectRequest req2 = new JsonObjectRequest(HTTPRequestManager.SERVER_LOCATION + "/status", new JSONObject(params2),
-                                                response2 -> {
-                                                    Log.d("Response", response2.toString());
-                                                    try {
-                                                        int status = Integer.parseInt((String) response2.get("device_status"));
-                                                        socketCard.setVisibility(View.VISIBLE);
-                                                        statusGlobal = status;
-                                                        token = idToken;
-                                                        DUID = response.get("device_code");
+                                                            if (status == 0) {
+                                                                socketIButton.setImageResource(R.drawable.socket_power_off);
+                                                                socketStatus.setText("Inactive");
+                                                                socketStatus.setTextColor(getResources().getColor(R.color.red));
+                                                            } else if (status == 1) {
+                                                                socketIButton.setImageResource(R.drawable.socket_power_on);
+                                                                socketStatus.setText("Active");
+                                                                socketStatus.setTextColor(getResources().getColor(R.color.green));
+                                                            }
 
-                                                        if(status == 0){
-                                                            socketIButton.setImageResource(R.drawable.socket_power_off);
-                                                            socketStatus.setText("Inactive");
-                                                            socketStatus.setTextColor(getResources().getColor(R.color.red));
-                                                        }else if(status == 1){
-                                                            socketIButton.setImageResource(R.drawable.socket_power_on);
-                                                            socketStatus.setText("Active");
-                                                            socketStatus.setTextColor(getResources().getColor(R.color.green));
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
                                                         }
+                                                    }, error -> VolleyLog.e("Error: ", error.getMessage()));
 
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }, error -> VolleyLog.e("Error: ", error.getMessage()));
-
-                                        RequestQueue requestQueue = Volley.newRequestQueue(this);
-                                        requestQueue.add(req2);
+                                            RequestQueue requestQueue = Volley.newRequestQueue(this);
+                                            requestQueue.add(req2);
+                                            requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
 
 
-
+                                        }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -312,6 +334,7 @@ public class DashboardActivity extends AppCompatActivity{
 
                         RequestQueue requestQueue = Volley.newRequestQueue(this);
                         requestQueue.add(req);
+                        requestQueue.addRequestFinishedListener(request -> requestQueue.getCache().clear());
 
                     } else {
                         Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
